@@ -23,16 +23,14 @@ UV can be installed via a standalone installer or package manager.
 
 #### Standalone Installer
 
-For macOS and Linux:
-
 [Installation guide](https://docs.astral.sh/uv/getting-started/installation/)
 
 #### Set Up the Virtual Environment
 
-uv venv
-uv sync
+- `uv venv`
+- `uv sync`
 
 #### Run the pipeline
 
-uv run run_pipeline.py
+`uv run run_pipeline.py`
 
