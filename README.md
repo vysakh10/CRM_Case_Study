@@ -30,7 +30,8 @@ UV can be installed via a standalone installer or package manager.
 
 ## 🏃‍♂️ Run the pipeline
 
-Point to the appropriate datasets in the run_pipeline.py file and run:
+- Make sure the directories to which the plots are saved already exists.
+- Point to the appropriate datasets in the run_pipeline.py file and run:
 
 `uv run run_pipeline.py`
 
