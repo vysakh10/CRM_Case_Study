@@ -398,7 +398,7 @@ def label_encode_categorical(
 
 def cum_actions_growth_comp_to_prev_week(data: pd.DataFrame) -> pd.DataFrame:
     """
-    Adds a column for growth in ACTIONS_CRM_COMPANIES compared to the previous week.
+    Adds a column for growth in ACTIONS growth compared to the previous week for all usage objects.
     Args:
         data (pd.DataFrame): Input DataFrame with 'id', 'WHEN_TIMESTAMP', and 'ACTIONS_CRM_COMPANIES'.
     Returns:
