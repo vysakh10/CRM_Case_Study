@@ -17,12 +17,12 @@ def get_xgb_model(params: Optional[dict] = None) -> xgb.XGBClassifier:
         xgb_best_params = params
     else:
         xgb_best_params = {
-            "learning_rate": 0.006496050467463248,
-            "max_depth": 5,
-            "subsample": 0.9990534611257977,
-            "colsample_bytree": 0.9083351644197917,
-            "colsample_bylevel": 0.9455249909579699,
-            "n_estimators": 298,
+            "learning_rate": 0.01398938455961057,
+            "max_depth": 2,
+            "subsample": 0.5730043632733691,
+            "colsample_bytree": 0.8647952207290815,
+            "colsample_bylevel": 0.9418830321926245,
+            "n_estimators": 535,
             "n_jobs": -1,
         }
 

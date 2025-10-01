@@ -2,7 +2,6 @@
 __pycache__/
 *.pyc
 .DS_Store
-autogluon_models/
 dataset/
 initial_exploration.ipynb
 modeling_trial.ipynb

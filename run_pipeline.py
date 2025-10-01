@@ -3,6 +3,7 @@ import logging
 from src.config import FileArgs
 from src.model.evaluation import plot_feature_importance, plot_top_k_metrics
 from src.model.model import get_xgb_predictions, train_xgb_model
+from src.model.tune_model import tune_xgb_model
 from src.prepare_data import get_train_test_val_split, prepare_modeling_data
 
 logging.basicConfig(
@@ -14,7 +15,9 @@ logging.basicConfig(
 logger = logging.getLogger()
 
 
-def run_pipeline(args: FileArgs, feature_importance: bool = True) -> None:
+def run_pipeline(
+    args: FileArgs, tune: bool = True, feature_importance: bool = True
+) -> None:
     """
     Runs the end-to-end machine learning pipeline for customer modeling.
 
@@ -35,9 +38,14 @@ def run_pipeline(args: FileArgs, feature_importance: bool = True) -> None:
     X_train, X_val, X_test, y_train, y_val, y_test = get_train_test_val_split(
         modeling_data
     )
+    if tune:
+        params = tune_xgb_model(X_train, y_train, X_val, y_val, n_trials=1000)
+        logger.info(f"Best Hyper-parameters: {params}")
+    else:
+        params = None
 
     logger.info("Training XGBClassifier!!")
-    model = train_xgb_model(x_train=X_train, y_train=y_train)
+    model = train_xgb_model(x_train=X_train, y_train=y_train, params=params)
 
     logger.info("Getting Predictions!!")
     y_pred_train, y_pred_probs_train = get_xgb_predictions(X_train, model)
@@ -85,4 +93,4 @@ if __name__ == "__main__":
         customers_path=cus_file, non_customers_path=noncus_file, usage_path=usage_file
     )
 
-    run_pipeline(args)
+    run_pipeline(args=args, tune=False, feature_importance=True)

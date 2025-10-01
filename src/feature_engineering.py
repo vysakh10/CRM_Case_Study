@@ -405,16 +405,26 @@ def cum_actions_growth_comp_to_prev_week(data: pd.DataFrame) -> pd.DataFrame:
         pd.DataFrame: DataFrame with 'GROWTH_ACTIONS_COMPANIES_PREV_WEEK' column added.
     """
 
-    # Example: cumulative actions growth compared to previous week
     data["CONTACTS_CUM_GROWTH"] = data["CUMULATIVE_ACTIONS_CONTACTS"] / data.groupby(
         "id"
     )["CUMULATIVE_ACTIONS_CONTACTS"].shift(1).replace(0, 1)
+
+    data["DEALS_CUM_GROWTH"] = data["CUMULATIVE_ACTIONS_DEALS"] / data.groupby("id")[
+        "CUMULATIVE_ACTIONS_DEALS"
+    ].shift(1).replace(0, 1)
+
+    data["COMPANIES_CUM_GROWTH"] = data["CUMULATIVE_ACTIONS_COMPANIES"] / data.groupby(
+        "id"
+    )["CUMULATIVE_ACTIONS_COMPANIES"].shift(1).replace(0, 1)
+
     data["TOTAL_CUM_GROWTH"] = data["TOTAL_CUM_ACTIONS"] / data.groupby("id")[
         "TOTAL_CUM_ACTIONS"
     ].shift(1).replace(0, 1)
 
     data["CONTACTS_CUM_GROWTH"] = data["CONTACTS_CUM_GROWTH"].fillna(1)
     data["TOTAL_CUM_GROWTH"] = data["TOTAL_CUM_GROWTH"].fillna(1)
+    data["DEALS_CUM_GROWTH"] = data["DEALS_CUM_GROWTH"].fillna(1)
+    data["COMPANIES_CUM_GROWTH"] = data["COMPANIES_CUM_GROWTH"].fillna(1)
 
     return data
 

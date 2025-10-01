@@ -36,7 +36,11 @@ def precision_at_k(
 
 
 def tune_xgb_model(
-    X_train: pd.DataFrame, y_train: pd.Series, X_val: pd.DataFrame, y_val: pd.Series
+    X_train: pd.DataFrame,
+    y_train: pd.Series,
+    X_val: pd.DataFrame,
+    y_val: pd.Series,
+    n_trials: int = 100,
 ) -> dict:
     """
     Tunes hyperparameters for an XGBoost classifier using Optuna to maximize precision at top 10%.
@@ -76,7 +80,7 @@ def tune_xgb_model(
         return prec
 
     study = optuna.create_study(direction="maximize")
-    study.optimize(objective, n_trials=100, show_progress_bar=True)
+    study.optimize(objective, n_trials=n_trials, show_progress_bar=True)
 
     logger.info(f"Best Trial: {study.best_trial.number}")
     logger.info(f"Best Precision@10%: {study.best_trial.value}")
