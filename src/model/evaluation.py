@@ -38,6 +38,7 @@ def plot_top_k_metrics(
     y_probs: pd.Series | list,
     set: str = "Test",
     top_percent: int = 20,
+    save_path: str = None,
 ) -> None:
     """
     Plots a heatmap of precision and recall at each top K% from 1 to top_percent.
@@ -74,10 +75,14 @@ def plot_top_k_metrics(
     plt.title(f"{set} Precision & Recall @ Top K% (1–{top_percent}%)")
     plt.xlabel("Top K%")
     plt.ylabel("Metric")
+    if save_path:
+        plt.savefig(save_path)
     plt.show()
 
 
-def plot_feature_importance(x_train: pd.DataFrame, model) -> None:
+def plot_feature_importance(
+    x_train: pd.DataFrame, model, save_path: str = None
+) -> None:
     """
     Plots feature importances for a trained model.
     Args:
@@ -107,4 +112,8 @@ def plot_feature_importance(x_train: pd.DataFrame, model) -> None:
     plt.xlabel("Importance Score")
     plt.ylabel("Features")
     plt.tight_layout()
+
+    if save_path:
+        plt.savefig(save_path)
+
     plt.show()

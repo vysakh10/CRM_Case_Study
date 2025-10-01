@@ -2,7 +2,7 @@ import logging
 
 from src.config import FileArgs
 from src.model.evaluation import plot_feature_importance, plot_top_k_metrics
-from src.model.model import get_xgb_model, get_xgb_predictions, train_xgb_model
+from src.model.model import get_xgb_predictions, train_xgb_model
 from src.prepare_data import get_train_test_val_split, prepare_modeling_data
 
 logging.basicConfig(
@@ -47,15 +47,35 @@ def run_pipeline(args: FileArgs, feature_importance: bool = True) -> None:
     y_pred_test, y_pred_probs_test = get_xgb_predictions(X_test, model)
 
     logger.info("Plotting Recall and Precision @ K")
-    plot_top_k_metrics(y_train, y_pred_probs_train, set="Train", top_percent=30)
+    plot_top_k_metrics(
+        y_train,
+        y_pred_probs_train,
+        set="Train",
+        top_percent=30,
+        save_path="result_charts/train_precision_recall.png",
+    )
 
-    plot_top_k_metrics(y_val, y_pred_probs_val, set="Val", top_percent=30)
+    plot_top_k_metrics(
+        y_val,
+        y_pred_probs_val,
+        set="Val",
+        top_percent=30,
+        save_path="result_charts/val_precision_recall.png",
+    )
 
-    plot_top_k_metrics(y_test, y_pred_probs_test, set="Test", top_percent=30)
+    plot_top_k_metrics(
+        y_test,
+        y_pred_probs_test,
+        set="Test",
+        top_percent=30,
+        save_path="result_charts/test_precision_recall.png",
+    )
 
     logger.info("Plotting Feature Importance")
     if feature_importance:
-        plot_feature_importance(X_train, model)
+        plot_feature_importance(
+            X_train, model, save_path="result_charts/feature_importance.png"
+        )
 
 
 if __name__ == "__main__":
