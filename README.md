@@ -1,4 +1,4 @@
-# CRM_Case_Study
+# CRM Case Study
 
 ## 📘 Overview
 
