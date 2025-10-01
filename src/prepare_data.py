@@ -4,7 +4,8 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 from src.config import FileArgs
-from src.feature_engineering import get_features, standard_scale_num_features
+from src.feature_engineering import (get_features, label_encode_categorical,
+                                     standard_scale_num_features)
 
 logging.basicConfig(
     level=logging.INFO,  # Logging level: DEBUG, INFO, WARNING, ERROR, CRITICAL
@@ -103,6 +104,7 @@ def prepare_modeling_data(
 
     modeling_df["WILL_CONVERT"] = (modeling_df["DAYS_DIFF"] <= 30).astype(int)
 
+    modeling_df["INDUSTRY"] = modeling_df["INDUSTRY"].fillna("UNKNOWN")
     if feature_engineer:
         modeling_df = get_features(modeling_df, modeling)
 
@@ -168,6 +170,9 @@ def get_train_test_val_split(
     if scale_num_features:
         x_train_scaled, x_val_scaled, x_test_scaled = standard_scale_num_features(
             X_train, X_val, X_test
+        )
+        x_train_scaled, x_val_scaled, x_test_scaled = label_encode_categorical(
+            x_train_scaled, x_val_scaled, x_test_scaled, "INDUSTRY"
         )
 
     return x_train_scaled, x_val_scaled, x_test_scaled, y_train, y_val, y_test

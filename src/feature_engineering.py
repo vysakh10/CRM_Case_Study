@@ -1,6 +1,7 @@
+import category_encoders as ce
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 from src.constants import NUM_COLS, employee_range_map
 
@@ -340,6 +341,84 @@ def get_total_cum_actions_and_users(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
 
+def one_hot_encode_categorical(
+    data: pd.DataFrame, col: str, modeling: bool = True
+) -> pd.DataFrame:
+    """
+    One-hot encodes a categorical column and drops the original column.
+    Args:
+        data (pd.DataFrame): Input DataFrame.
+        col (str): Name of the categorical column to encode.
+    Returns:
+        pd.DataFrame: DataFrame with one-hot encoded columns.
+    """
+
+    ohe = OneHotEncoder(sparse_output=False, drop="first")
+    ohe_df = pd.DataFrame(
+        ohe.fit_transform(data[[col]]), columns=ohe.get_feature_names_out([col])
+    )
+    data = pd.concat(
+        [data.reset_index(drop=True), ohe_df.reset_index(drop=True)], axis=1
+    )
+
+    if modeling:
+        data = data.drop(columns=[col])
+
+    return data
+
+
+def label_encode_categorical(
+    X_train: pd.DataFrame,
+    X_val: pd.DataFrame,
+    X_test: pd.DataFrame,
+    col: str,
+    modeling: bool = True,
+) -> pd.DataFrame:
+    """
+    Label encodes a categorical column and drops the original column.
+    Args:
+        data (pd.DataFrame): Input DataFrame.
+        col (str): Name of the categorical column to encode.
+    Returns:
+        pd.DataFrame: DataFrame with label encoded column.
+    """
+
+    encoder = ce.OrdinalEncoder(handle_unknown="impute")
+    X_train[col + "_LE"] = encoder.fit_transform(X_train[col])
+    X_val[col + "_LE"] = encoder.transform(X_val[col])
+    X_test[col + "_LE"] = encoder.transform(X_test[col])
+
+    if modeling:
+        X_train = X_train.drop(columns=[col])
+        X_val = X_val.drop(columns=[col])
+        X_test = X_test.drop(columns=[col])
+
+    return X_train, X_val, X_test
+
+
+def cum_actions_growth_comp_to_prev_week(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adds a column for growth in ACTIONS_CRM_COMPANIES compared to the previous week.
+    Args:
+        data (pd.DataFrame): Input DataFrame with 'id', 'WHEN_TIMESTAMP', and 'ACTIONS_CRM_COMPANIES'.
+    Returns:
+        pd.DataFrame: DataFrame with 'GROWTH_ACTIONS_COMPANIES_PREV_WEEK' column added.
+    """
+
+    # Example: cumulative actions growth compared to previous week
+    data["CONTACTS_CUM_GROWTH"] = data["CUMULATIVE_ACTIONS_CONTACTS"] / data.groupby(
+        "id"
+    )["CUMULATIVE_ACTIONS_CONTACTS"].shift(1).replace(0, 1)
+    data["TOTAL_CUM_GROWTH"] = data["TOTAL_CUM_ACTIONS"] / data.groupby("id")[
+        "TOTAL_CUM_ACTIONS"
+    ].shift(1).replace(0, 1)
+
+    data["CONTACTS_CUM_GROWTH"] = data["CONTACTS_CUM_GROWTH"].fillna(1)
+    data["TOTAL_CUM_GROWTH"] = data["TOTAL_CUM_GROWTH"].fillna(1)
+
+    return data
+
+
 def get_features(modeling_data: pd.DataFrame, modeling: bool = False) -> pd.DataFrame:
     """
     Applies a series of feature engineering steps to the modeling data.
@@ -362,6 +441,7 @@ def get_features(modeling_data: pd.DataFrame, modeling: bool = False) -> pd.Data
 
     modeling_data = get_total_users_and_actions(modeling_data)
     modeling_data = get_total_cum_actions_and_users(modeling_data)
+    modeling_data = cum_actions_growth_comp_to_prev_week(modeling_data)
 
     if modeling:
         modeling_data = rem_outliers(modeling_data)
@@ -374,10 +454,11 @@ def get_features(modeling_data: pd.DataFrame, modeling: bool = False) -> pd.Data
 
     modeling_data = map_employee_range(modeling_data, modeling)
 
-    # modeling_data = cyclic_encode_day(modeling_data, modeling)
-    # modeling_data = cyclic_encode_month(modeling_data, modeling)
+    # modeling_data = one_hot_encode_categorical(modeling_data, "DAY", modeling)
 
-    if modeling:
-        modeling_data = modeling_data.drop(["INDUSTRY"], axis=1)  # too many NaNs
+    # if modeling:
+    #     modeling_data = modeling_data.drop(["INDUSTRY"], axis=1)  # too many NaNs
+    # modeling_data["INDUSTRY"] = modeling_data["INDUSTRY"].fillna("UNKNOWN")
+    # modeling_data = one_hot_encode_categorical(modeling_data, "INDUSTRY", modeling)
 
     return modeling_data.reset_index(drop=True)

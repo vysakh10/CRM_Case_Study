@@ -1,3 +1,10 @@
 .venv/
 __pycache__/
 *.pyc
+.DS_Store
+autogluon_models/
+dataset/
+initial_exploration.ipynb
+modeling_trial.ipynb
+modeling_trial2.ipynb
+rough.ipynb

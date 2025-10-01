@@ -32,8 +32,6 @@ def run_pipeline(args: FileArgs, feature_importance: bool = True) -> None:
 
     modeling_data = prepare_modeling_data(args, feature_engineer=True)
 
-    features_to_drop = [""]
-
     X_train, X_val, X_test, y_train, y_val, y_test = get_train_test_val_split(
         modeling_data
     )

@@ -35,7 +35,7 @@ def precision_at_k(
     return precision
 
 
-def tune_model(
+def tune_xgb_model(
     X_train: pd.DataFrame, y_train: pd.Series, X_val: pd.DataFrame, y_val: pd.Series
 ) -> dict:
     """
