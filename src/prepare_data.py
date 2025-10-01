@@ -90,7 +90,7 @@ def prepare_modeling_data(
     modeling_df = pd.merge(
         usage_actions_df,
         customers_df[["id", "CLOSEDATE", "ALEXA_RANK", "EMPLOYEE_RANGE", "INDUSTRY"]],
-        how="left",
+        how="inner",
         on="id",
     )
 
