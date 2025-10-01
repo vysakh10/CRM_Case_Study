@@ -21,16 +21,14 @@ Ensure you have the following installed:
 
 UV can be installed via a standalone installer or package manager.
 
-#### Standalone Installer
-
 [Installation guide](https://docs.astral.sh/uv/getting-started/installation/)
 
-#### Set Up the Virtual Environment
+### 2. Set Up the Virtual Environment
 
 - `uv venv`
 - `uv sync`
 
-#### Run the pipeline
+## 🏃‍♂️ Run the pipeline
 
 `uv run run_pipeline.py`
 
