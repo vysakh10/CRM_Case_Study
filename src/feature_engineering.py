@@ -1,76 +1,169 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
-def cum_actions_contacts(data):
+from src.constants import NUM_COLS, employee_range_map
 
-    data = data.sort_values(by=['id', 'WHEN_TIMESTAMP'])
-    data['CUMULATIVE_ACTIONS_CONTACTS'] = data.groupby('id')['ACTIONS_CRM_CONTACTS'].cumsum()
 
-    return data
+def cum_actions_contacts(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adds a cumulative sum column for ACTIONS_CRM_CONTACTS per user over time.
+    Args:
+        data (pd.DataFrame): Input DataFrame with 'id', 'WHEN_TIMESTAMP', and 'ACTIONS_CRM_CONTACTS'.
+    Returns:
+        pd.DataFrame: DataFrame with 'CUMULATIVE_ACTIONS_CONTACTS' column added.
+    """
 
-def cum_actions_companies(data):
-
-    data = data.sort_values(by=['id', 'WHEN_TIMESTAMP'])
-    data['CUMULATIVE_ACTIONS_COMPANIES'] = data.groupby('id')['ACTIONS_CRM_COMPANIES'].cumsum()
-
-    return data
-
-def cum_actions_deals(data):
-
-    data = data.sort_values(by=['id', 'WHEN_TIMESTAMP'])
-    data['CUMULATIVE_ACTIONS_DEALS'] = data.groupby('id')['ACTIONS_CRM_DEALS'].cumsum()
-
-    return data
-
-def cum_actions_emails(data):
-
-    data = data.sort_values(by=['id', 'WHEN_TIMESTAMP'])
-    data['CUMULATIVE_ACTIONS_EMAILS'] = data.groupby('id')['ACTIONS_EMAIL'].cumsum()
+    data = data.sort_values(by=["id", "WHEN_TIMESTAMP"])
+    data["CUMULATIVE_ACTIONS_CONTACTS"] = data.groupby("id")[
+        "ACTIONS_CRM_CONTACTS"
+    ].cumsum()
 
     return data
 
 
-def cum_users_contacts(data):
+def cum_actions_companies(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adds a cumulative sum column for ACTIONS_CRM_COMPANIES per user over time.
+    Args:
+        data (pd.DataFrame): Input DataFrame with 'id', 'WHEN_TIMESTAMP', and 'ACTIONS_CRM_COMPANIES'.
+    Returns:
+        pd.DataFrame: DataFrame with 'CUMULATIVE_ACTIONS_COMPANIES' column added.
+    """
 
-    data = data.sort_values(by=['id', 'WHEN_TIMESTAMP'])
-    data['CUMULATIVE_USERS_CONTACTS'] = data.groupby('id')['USERS_CRM_CONTACTS'].cumsum()
-
-    return data
-
-def cum_users_companies(data):
-
-    data = data.sort_values(by=['id', 'WHEN_TIMESTAMP'])
-    data['CUMULATIVE_USERS_COMPANIES'] = data.groupby('id')['USERS_CRM_COMPANIES'].cumsum()
-
-    return data
-
-def cum_users_deals(data):
-
-    data = data.sort_values(by=['id', 'WHEN_TIMESTAMP'])
-    data['CUMULATIVE_USERS_DEALS'] = data.groupby('id')['USERS_CRM_DEALS'].cumsum()
+    data = data.sort_values(by=["id", "WHEN_TIMESTAMP"])
+    data["CUMULATIVE_ACTIONS_COMPANIES"] = data.groupby("id")[
+        "ACTIONS_CRM_COMPANIES"
+    ].cumsum()
 
     return data
 
-def cum_users_emails(data):
 
-    data = data.sort_values(by=['id', 'WHEN_TIMESTAMP'])
-    data['CUMULATIVE_USERS_EMAILS'] = data.groupby('id')['USERS_EMAIL'].cumsum()
+def cum_actions_deals(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adds a cumulative sum column for ACTIONS_CRM_DEALS per user over time.
+    Args:
+        data (pd.DataFrame): Input DataFrame with 'id', 'WHEN_TIMESTAMP', and 'ACTIONS_CRM_DEALS'.
+    Returns:
+        pd.DataFrame: DataFrame with 'CUMULATIVE_ACTIONS_DEALS' column added.
+    """
+
+    data = data.sort_values(by=["id", "WHEN_TIMESTAMP"])
+    data["CUMULATIVE_ACTIONS_DEALS"] = data.groupby("id")["ACTIONS_CRM_DEALS"].cumsum()
 
     return data
 
-def get_date_features(data, col, modeling=True):
+
+def cum_actions_emails(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adds a cumulative sum column for ACTIONS_EMAIL per user over time.
+    Args:
+        data (pd.DataFrame): Input DataFrame with 'id', 'WHEN_TIMESTAMP', and 'ACTIONS_EMAIL'.
+    Returns:
+        pd.DataFrame: DataFrame with 'CUMULATIVE_ACTIONS_EMAILS' column added.
+    """
+
+    data = data.sort_values(by=["id", "WHEN_TIMESTAMP"])
+    data["CUMULATIVE_ACTIONS_EMAILS"] = data.groupby("id")["ACTIONS_EMAIL"].cumsum()
+
+    return data
+
+
+def cum_users_contacts(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adds a cumulative sum column for USERS_CRM_CONTACTS per user over time.
+    Args:
+        data (pd.DataFrame): Input DataFrame with 'id', 'WHEN_TIMESTAMP', and 'USERS_CRM_CONTACTS'.
+    Returns:
+        pd.DataFrame: DataFrame with 'CUMULATIVE_USERS_CONTACTS' column added.
+    """
+
+    data = data.sort_values(by=["id", "WHEN_TIMESTAMP"])
+    data["CUMULATIVE_USERS_CONTACTS"] = data.groupby("id")[
+        "USERS_CRM_CONTACTS"
+    ].cumsum()
+
+    return data
+
+
+def cum_users_companies(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adds a cumulative sum column for USERS_CRM_COMPANIES per user over time.
+    Args:
+        data (pd.DataFrame): Input DataFrame with 'id', 'WHEN_TIMESTAMP', and 'USERS_CRM_COMPANIES'.
+    Returns:
+        pd.DataFrame: DataFrame with 'CUMULATIVE_USERS_COMPANIES' column added.
+    """
+
+    data = data.sort_values(by=["id", "WHEN_TIMESTAMP"])
+    data["CUMULATIVE_USERS_COMPANIES"] = data.groupby("id")[
+        "USERS_CRM_COMPANIES"
+    ].cumsum()
+
+    return data
+
+
+def cum_users_deals(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adds a cumulative sum column for USERS_CRM_DEALS per user over time.
+    Args:
+        data (pd.DataFrame): Input DataFrame with 'id', 'WHEN_TIMESTAMP', and 'USERS_CRM_DEALS'.
+    Returns:
+        pd.DataFrame: DataFrame with 'CUMULATIVE_USERS_DEALS' column added.
+    """
+
+    data = data.sort_values(by=["id", "WHEN_TIMESTAMP"])
+    data["CUMULATIVE_USERS_DEALS"] = data.groupby("id")["USERS_CRM_DEALS"].cumsum()
+
+    return data
+
+
+def cum_users_emails(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adds a cumulative sum column for USERS_EMAIL per user over time.
+    Args:
+        data (pd.DataFrame): Input DataFrame with 'id', 'WHEN_TIMESTAMP', and 'USERS_EMAIL'.
+    Returns:
+        pd.DataFrame: DataFrame with 'CUMULATIVE_USERS_EMAILS' column added.
+    """
+
+    data = data.sort_values(by=["id", "WHEN_TIMESTAMP"])
+    data["CUMULATIVE_USERS_EMAILS"] = data.groupby("id")["USERS_EMAIL"].cumsum()
+
+    return data
+
+
+def get_date_features(
+    data: pd.DataFrame, col: str, modeling: bool = True
+) -> pd.DataFrame:
+    """
+    Extracts day, month, and year from a datetime column. Optionally drops the timestamp column for modeling.
+    Args:
+        data (pd.DataFrame): Input DataFrame.
+        col (str): Name of the datetime column.
+        modeling (bool, optional): If True, drops the timestamp column. Defaults to True.
+    Returns:
+        pd.DataFrame: DataFrame with new date features.
+    """
 
     data[col] = pd.to_datetime(data[col])
-    data['DAY'] = data[col].dt.day
-    data['MONTH'] = data[col].dt.month
-    data['YEAR'] = data[col].dt.year
+    data["DAY"] = data[col].dt.day
+    data["MONTH"] = data[col].dt.month
+    data["YEAR"] = data[col].dt.year
     if modeling:
         data = data.drop(["WHEN_TIMESTAMP"], axis=1)
 
     return data
 
-def rem_outliers(data):
+
+def rem_outliers(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    Removes outliers based on hardcoded thresholds for several columns.
+    Args:
+        data (pd.DataFrame): Input DataFrame.
+    Returns:
+        pd.DataFrame: DataFrame with outliers removed.
+    """
 
     data = data[data["ACTIONS_CRM_CONTACTS"] < 3000]
     data = data[data["ACTIONS_CRM_COMPANIES"] < 1000]
@@ -78,58 +171,111 @@ def rem_outliers(data):
     data = data[data["USERS_CRM_COMPANIES"] < 30]
     data = data[data["USERS_CRM_DEALS"] < 40]
     data = data[data["ACTIONS_EMAIL"] < 175]
-    
-    return data
-
-def fill_na_employee_range(data):
-
-    if data[data['EMPLOYEE_RANGE'].isna()]["ALEXA_RANK"].values[0] > 15000001.0:
-
-        data['EMPLOYEE_RANGE'] = data['EMPLOYEE_RANGE'].fillna("1")
 
     return data
 
-def log_scale(data, col, modeling=True):
 
-    data['ALEXA_RANK_CLEAN'] = data['ALEXA_RANK'].replace(0, np.nan)
-    data['ALEXA_RANK_LOG'] = np.log1p(data['ALEXA_RANK_CLEAN'])
+def fill_na_employee_range(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    Fills missing EMPLOYEE_RANGE values based on ALEXA_RANK.
+    Args:
+        data (pd.DataFrame): Input DataFrame with 'EMPLOYEE_RANGE' and 'ALEXA_RANK'.
+    Returns:
+        pd.DataFrame: DataFrame with missing EMPLOYEE_RANGE filled.
+    """
+
+    if data[data["EMPLOYEE_RANGE"].isna()]["ALEXA_RANK"].values[0] > 15000001.0:
+        data["EMPLOYEE_RANGE"] = data["EMPLOYEE_RANGE"].fillna("1")
+
+    return data
+
+
+def log_scale(data: pd.DataFrame, col: str, modeling: bool = True) -> pd.DataFrame:
+    """
+    Applies log1p scaling to a column and optionally drops the original columns for modeling.
+    Args:
+        data (pd.DataFrame): Input DataFrame.
+        col (str): Name of the column to log scale.
+        modeling (bool, optional): If True, drops original columns. Defaults to True.
+    Returns:
+        pd.DataFrame: DataFrame with log-scaled column.
+    """
+
+    data["ALEXA_RANK_CLEAN"] = data["ALEXA_RANK"].replace(0, np.nan)
+    data["ALEXA_RANK_LOG"] = np.log1p(data["ALEXA_RANK_CLEAN"])
 
     if modeling:
         data = data.drop(["ALEXA_RANK", "ALEXA_RANK_CLEAN"], axis=1)
-    
+
     return data
 
-def cyclic_encode_day(data, modeling=True):
 
-    data['day_sin'] = np.sin(2 * np.pi * data["DAY"]/31)
+def cyclic_encode_day(data: pd.DataFrame, modeling: bool = True) -> pd.DataFrame:
+    """
+    Adds a sine-encoded feature for the day of the month. Optionally drops the original column.
+    Args:
+        data (pd.DataFrame): Input DataFrame with 'DAY'.
+        modeling (bool, optional): If True, drops 'DAY'. Defaults to True.
+    Returns:
+        pd.DataFrame: DataFrame with sine-encoded day feature.
+    """
+
+    data["day_sin"] = np.sin(2 * np.pi * data["DAY"] / 31)
 
     if modeling:
-        data = data.drop(['DAY'], axis=1)
+        data = data.drop(["DAY"], axis=1)
 
-def cyclic_encode_month(data, modeling=True):
+    return data
 
-    data['month_sin'] = np.sin(2 * np.pi * data["MONTH"]/31)
+
+def cyclic_encode_month(data: pd.DataFrame, modeling: bool = True) -> pd.DataFrame:
+    """
+    Adds a sine-encoded feature for the month. Optionally drops the original column.
+    Args:
+        data (pd.DataFrame): Input DataFrame with 'MONTH'.
+        modeling (bool, optional): If True, drops 'MONTH'. Defaults to True.
+    Returns:
+        pd.DataFrame: DataFrame with sine-encoded month feature.
+    """
+
+    data["month_sin"] = np.sin(2 * np.pi * data["MONTH"] / 12)
 
     if modeling:
-        data = data.drop(['MONTH'], axis=1)
+        data = data.drop(["MONTH"], axis=1)
 
-def map_employee_range(data, modeling=True):
+    return data
 
-    employee_range_map = {"1":1, "2 to 5":2, "6 to 10":3, "11 to 25":4, "26 to 50":5, "51 to 200":6, "201 to 1000":7, "1001 to 10000":8, "10,001 or more":9}
 
-    data['EMPLOYEE_RANGE_MAPPED'] = data['EMPLOYEE_RANGE'].map(employee_range_map)
+def map_employee_range(data: pd.DataFrame, modeling: bool = True) -> pd.DataFrame:
+    """
+    Maps EMPLOYEE_RANGE to a numeric value and optionally drops the original column.
+    Args:
+        data (pd.DataFrame): Input DataFrame with 'EMPLOYEE_RANGE'.
+        modeling (bool, optional): If True, drops 'EMPLOYEE_RANGE'. Defaults to True.
+    Returns:
+        pd.DataFrame: DataFrame with mapped employee range.
+    """
+
+    data["EMPLOYEE_RANGE_MAPPED"] = data["EMPLOYEE_RANGE"].map(employee_range_map)
 
     if modeling:
         data = data.drop(["EMPLOYEE_RANGE"], axis=1)
-    
+
     return data
 
-def standard_scale_num_features(x_train, x_val, x_test):
 
-    NUM_COLS = ["ACTIONS_CRM_CONTACTS", "ACTIONS_CRM_COMPANIES", "ACTIONS_CRM_DEALS", "ACTIONS_EMAIL", "USERS_CRM_CONTACTS", "USERS_CRM_COMPANIES",
-            "USERS_CRM_DEALS", "USERS_EMAIL", "ALEXA_RANK_LOG", "CUMULATIVE_ACTIONS_CONTACTS", "CUMULATIVE_ACTIONS_COMPANIES", "CUMULATIVE_ACTIONS_DEALS", 
-            "CUMULATIVE_ACTIONS_EMAILS", "CUMULATIVE_USERS_CONTACTS", "CUMULATIVE_USERS_COMPANIES", "CUMULATIVE_USERS_DEALS", "CUMULATIVE_USERS_EMAILS",
-            "YEAR"]
+def standard_scale_num_features(
+    x_train: pd.DataFrame, x_val: pd.DataFrame, x_test: pd.DataFrame
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """
+    Standard scales numeric columns in train, validation, and test sets.
+    Args:
+        x_train (pd.DataFrame): Training features.
+        x_val (pd.DataFrame): Validation features.
+        x_test (pd.DataFrame): Test features.
+    Returns:
+        Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]: Scaled train, val, and test DataFrames.
+    """
 
     x_train_scaled = x_train.copy()
     x_val_scaled = x_val.copy()
@@ -144,7 +290,65 @@ def standard_scale_num_features(x_train, x_val, x_test):
     return x_train_scaled, x_val_scaled, x_test_scaled
 
 
-def get_features(modeling_data, modeling=False):
+def get_total_users_and_actions(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adds total actions and total users columns by summing relevant columns.
+    Args:
+        data (pd.DataFrame): Input DataFrame.
+    Returns:
+        pd.DataFrame: DataFrame with total actions and users columns.
+    """
+
+    data["TOTAL_ACTIONS"] = (
+        data["ACTIONS_CRM_CONTACTS"]
+        + data["ACTIONS_CRM_COMPANIES"]
+        + data["ACTIONS_CRM_DEALS"]
+        + data["ACTIONS_EMAIL"]
+    )
+    data["TOTAL_USERS"] = (
+        data["USERS_CRM_CONTACTS"]
+        + data["USERS_CRM_COMPANIES"]
+        + data["USERS_CRM_DEALS"]
+        + data["USERS_EMAIL"]
+    )
+
+    return data
+
+
+def get_total_cum_actions_and_users(data: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adds total cumulative actions and users columns by summing relevant cumulative columns.
+    Args:
+        data (pd.DataFrame): Input DataFrame.
+    Returns:
+        pd.DataFrame: DataFrame with total cumulative actions and users columns.
+    """
+
+    data["TOTAL_CUM_ACTIONS"] = (
+        data["CUMULATIVE_ACTIONS_CONTACTS"]
+        + data["CUMULATIVE_ACTIONS_COMPANIES"]
+        + data["CUMULATIVE_ACTIONS_DEALS"]
+        + data["CUMULATIVE_ACTIONS_EMAILS"]
+    )
+    data["TOTAL_CUM_USERS"] = (
+        data["CUMULATIVE_USERS_CONTACTS"]
+        + data["CUMULATIVE_USERS_COMPANIES"]
+        + data["CUMULATIVE_USERS_DEALS"]
+        + data["CUMULATIVE_USERS_EMAILS"]
+    )
+
+    return data
+
+
+def get_features(modeling_data: pd.DataFrame, modeling: bool = False) -> pd.DataFrame:
+    """
+    Applies a series of feature engineering steps to the modeling data.
+    Args:
+        modeling_data (pd.DataFrame): Input DataFrame for modeling.
+        modeling (bool, optional): If True, applies modeling-specific steps. Defaults to False.
+    Returns:
+        pd.DataFrame: DataFrame with engineered features.
+    """
 
     modeling_data = cum_actions_contacts(modeling_data)
     modeling_data = cum_actions_companies(modeling_data)
@@ -155,6 +359,9 @@ def get_features(modeling_data, modeling=False):
     modeling_data = cum_users_companies(modeling_data)
     modeling_data = cum_users_deals(modeling_data)
     modeling_data = cum_users_emails(modeling_data)
+
+    modeling_data = get_total_users_and_actions(modeling_data)
+    modeling_data = get_total_cum_actions_and_users(modeling_data)
 
     if modeling:
         modeling_data = rem_outliers(modeling_data)
@@ -171,6 +378,6 @@ def get_features(modeling_data, modeling=False):
     # modeling_data = cyclic_encode_month(modeling_data, modeling)
 
     if modeling:
-        modeling_data = modeling_data.drop(["INDUSTRY"], axis=1) # too many NaNs
+        modeling_data = modeling_data.drop(["INDUSTRY"], axis=1)  # too many NaNs
 
     return modeling_data.reset_index(drop=True)
