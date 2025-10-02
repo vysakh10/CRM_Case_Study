@@ -211,42 +211,6 @@ def log_scale(data: pd.DataFrame, col: str, modeling: bool = True) -> pd.DataFra
     return data
 
 
-def cyclic_encode_day(data: pd.DataFrame, modeling: bool = True) -> pd.DataFrame:
-    """
-    Adds a sine-encoded feature for the day of the month. Optionally drops the original column.
-    Args:
-        data (pd.DataFrame): Input DataFrame with 'DAY'.
-        modeling (bool, optional): If True, drops 'DAY'. Defaults to True.
-    Returns:
-        pd.DataFrame: DataFrame with sine-encoded day feature.
-    """
-
-    data["day_sin"] = np.sin(2 * np.pi * data["DAY"] / 31)
-
-    if modeling:
-        data = data.drop(["DAY"], axis=1)
-
-    return data
-
-
-def cyclic_encode_month(data: pd.DataFrame, modeling: bool = True) -> pd.DataFrame:
-    """
-    Adds a sine-encoded feature for the month. Optionally drops the original column.
-    Args:
-        data (pd.DataFrame): Input DataFrame with 'MONTH'.
-        modeling (bool, optional): If True, drops 'MONTH'. Defaults to True.
-    Returns:
-        pd.DataFrame: DataFrame with sine-encoded month feature.
-    """
-
-    data["month_sin"] = np.sin(2 * np.pi * data["MONTH"] / 12)
-
-    if modeling:
-        data = data.drop(["MONTH"], axis=1)
-
-    return data
-
-
 def map_employee_range(data: pd.DataFrame, modeling: bool = True) -> pd.DataFrame:
     """
     Maps EMPLOYEE_RANGE to a numeric value and optionally drops the original column.
@@ -463,12 +427,5 @@ def get_features(modeling_data: pd.DataFrame, modeling: bool = False) -> pd.Data
     modeling_data = get_date_features(modeling_data, "WHEN_TIMESTAMP", modeling)
 
     modeling_data = map_employee_range(modeling_data, modeling)
-
-    # modeling_data = one_hot_encode_categorical(modeling_data, "DAY", modeling)
-
-    # if modeling:
-    #     modeling_data = modeling_data.drop(["INDUSTRY"], axis=1)  # too many NaNs
-    # modeling_data["INDUSTRY"] = modeling_data["INDUSTRY"].fillna("UNKNOWN")
-    # modeling_data = one_hot_encode_categorical(modeling_data, "INDUSTRY", modeling)
 
     return modeling_data.reset_index(drop=True)
