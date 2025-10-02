@@ -163,9 +163,13 @@ def get_train_test_val_split(
     X_test = test_df.drop(columns=["WILL_CONVERT", "id"])
     y_test = test_df["WILL_CONVERT"]
 
+    logger.info(f"\nUnique IDs in Train: {len(train_ids)}")
+    logger.info(f"Unique IDs in Validation: {len(val_ids)}")
+    logger.info(f"Unique IDs in Test: {len(test_ids)}\n")
+
     logger.info(f"Train Shape: {X_train.shape, y_train.shape}")
     logger.info(f"Validation Shape: {X_val.shape, y_val.shape}")
-    logger.info(f"Test Shape: {X_test.shape, y_test.shape}")
+    logger.info(f"Test Shape: {X_test.shape, y_test.shape}\n")
 
     if scale_num_features:
         x_train_scaled, x_val_scaled, x_test_scaled = standard_scale_num_features(
